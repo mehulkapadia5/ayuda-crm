@@ -117,6 +117,9 @@ export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDraw
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[400px] sm:w-[540px] p-0">
+            <SheetHeader className="sr-only">
+              <SheetTitle>WhatsApp Chat - {leadName}</SheetTitle>
+            </SheetHeader>
             <div className="flex flex-col h-full">
               <ChatContent onClose={() => setDesktopOpen(false)} />
             </div>
