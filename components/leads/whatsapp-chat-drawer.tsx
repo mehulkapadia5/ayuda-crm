@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { IconMessageCircle, IconSend, IconX } from "@tabler/icons-react"
@@ -38,61 +39,89 @@ export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDraw
 
   const allMessages = [...mockMessages, ...messages].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
 
-  return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant="outline" className="w-full justify-start gap-2">
-          <IconMessageCircle className="h-4 w-4" />
-          Chat with {leadName}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent className="h-[80vh]">
-        <DrawerHeader className="border-b">
-          <div className="flex items-center justify-between">
-            <DrawerTitle className="flex items-center gap-2">
-              <IconMessageCircle className="h-5 w-5" />
-              WhatsApp Chat - {leadName}
-            </DrawerTitle>
-            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
-              <IconX className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="text-sm text-muted-foreground">
-            {phone} • Last seen recently
-          </div>
-        </DrawerHeader>
-        
-        <div className="flex-1 flex flex-col">
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {allMessages.map((message) => (
-              <div
-                key={message.id}
-                className={`flex ${message.sent ? 'justify-end' : 'justify-start'}`}
-              >
-                <Card className={`max-w-[80%] ${message.sent ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
-                  <CardContent className="p-3">
-                    <div className="text-sm">{message.text}</div>
-                    <div className={`text-xs mt-1 ${message.sent ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
-                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-
-          {/* Message Input */}
-          <div className="border-t p-4">
-            <SendWhatsAppForm 
-              phone={phone} 
-              leadId={leadId}
-              onMessageSent={handleSendMessage}
-              compact={true}
-            />
+  const ChatContent = () => (
+    <>
+      <div className="flex items-center justify-between border-b p-4">
+        <div className="flex items-center gap-2">
+          <IconMessageCircle className="h-5 w-5" />
+          <div>
+            <div className="font-semibold">WhatsApp Chat - {leadName}</div>
+            <div className="text-sm text-muted-foreground">
+              {phone} • Last seen recently
+            </div>
           </div>
         </div>
-      </DrawerContent>
-    </Drawer>
+        <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
+          <IconX className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      <div className="flex-1 flex flex-col">
+        {/* Messages */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {allMessages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex ${message.sent ? 'justify-end' : 'justify-start'}`}
+            >
+              <Card className={`max-w-[80%] ${message.sent ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>
+                <CardContent className="p-3">
+                  <div className="text-sm">{message.text}</div>
+                  <div className={`text-xs mt-1 ${message.sent ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}>
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
+        </div>
+
+        {/* Message Input */}
+        <div className="border-t p-4">
+          <SendWhatsAppForm 
+            phone={phone} 
+            leadId={leadId}
+            onMessageSent={handleSendMessage}
+            compact={true}
+          />
+        </div>
+      </div>
+    </>
+  )
+
+  return (
+    <>
+      {/* Mobile Drawer */}
+      <div className="md:hidden">
+        <Drawer open={open} onOpenChange={setOpen}>
+          <DrawerTrigger asChild>
+            <Button variant="outline" className="w-full justify-start gap-2">
+              <IconMessageCircle className="h-4 w-4" />
+              Chat with {leadName}
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="h-[80vh]">
+            <ChatContent />
+          </DrawerContent>
+        </Drawer>
+      </div>
+
+      {/* Desktop Sheet */}
+      <div className="hidden md:block">
+        <Sheet open={open} onOpenChange={setOpen}>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="w-full justify-start gap-2">
+              <IconMessageCircle className="h-4 w-4" />
+              Chat with {leadName}
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[400px] sm:w-[540px] p-0">
+            <div className="flex flex-col h-full">
+              <ChatContent />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </>
   )
 }
