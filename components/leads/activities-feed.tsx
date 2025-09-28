@@ -62,32 +62,37 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
     
     // Special formatting for Lead Stage Changed
     if (type === 'Lead Stage Changed') {
+      const fromStage = details.from_stage as string | undefined
+      const toStage = details.to_stage as string | undefined
+      const changeTime = details.change_time as string | undefined
+      const reason = details.reason as string | undefined
+      
       return (
         <div className="space-y-2">
-          {details.from_stage && details.to_stage && (
+          {fromStage && toStage && (
             <div className="flex items-center gap-2 p-2 bg-primary/10 rounded-md">
               <span className="text-sm font-medium text-primary">
-                {String(details.from_stage)} → {String(details.to_stage)}
+                {fromStage} → {toStage}
               </span>
             </div>
           )}
-          {details.change_time && (
+          {changeTime && (
             <div className="flex items-start gap-2 py-1">
               <span className="font-medium text-sm text-muted-foreground min-w-[80px]">
                 Time:
               </span>
               <span className="text-sm flex-1">
-                {String(details.change_time)}
+                {changeTime}
               </span>
             </div>
           )}
-          {details.reason && (
+          {reason && (
             <div className="flex items-start gap-2 py-1">
               <span className="font-medium text-sm text-muted-foreground min-w-[80px]">
                 Reason:
               </span>
               <span className="text-sm flex-1">
-                {String(details.reason)}
+                {reason}
               </span>
             </div>
           )}
