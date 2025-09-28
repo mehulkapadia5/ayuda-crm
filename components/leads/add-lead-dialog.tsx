@@ -6,7 +6,11 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export function AddLeadDialog() {
+interface AddLeadDialogProps {
+  onLeadAdded?: () => void
+}
+
+export function AddLeadDialog({ onLeadAdded }: AddLeadDialogProps) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ name: "", email: "", countryCode: "+1", phone: "", source: "", stage: "Lead" })
@@ -31,7 +35,11 @@ export function AddLeadDialog() {
       }
       setOpen(false)
       setForm({ name: "", email: "", countryCode: "+1", phone: "", source: "", stage: "Lead" })
-      window.location.reload()
+      if (onLeadAdded) {
+        onLeadAdded()
+      } else {
+        window.location.reload()
+      }
     } catch (e) {
       console.error(e)
       alert(`Failed to add lead: ${e instanceof Error ? e.message : 'Unknown error'}`)

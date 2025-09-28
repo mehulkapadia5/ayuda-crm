@@ -70,7 +70,7 @@ This guide will help you deploy your Ayuda CRM to Vercel and connect it to your 
 ## Step 3: Update Google Forms Integration
 
 1. **Get your webhook URL**:
-   - Your webhook will be: `https://your-app-name.vercel.app/api/webhooks/google-forms`
+   - Your webhook will be: `https://ayuda-crm-na24.vercel.app/api/webhooks/google-forms`
 
 2. **Update Google Apps Script**:
    - Open your Google Form
@@ -78,7 +78,7 @@ This guide will help you deploy your Ayuda CRM to Vercel and connect it to your 
    - Update the `webhookUrl` variable in the script:
 
    ```javascript
-   const webhookUrl = 'https://your-app-name.vercel.app/api/webhooks/google-forms';
+   const webhookUrl = 'https://ayuda-crm-na24.vercel.app/api/webhooks/google-forms';
    ```
 
 3. **Test the integration**:
