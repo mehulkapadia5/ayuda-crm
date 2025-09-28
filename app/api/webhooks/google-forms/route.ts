@@ -60,10 +60,10 @@ export async function POST(request: Request) {
     const name = coalesceString(getStringField(json, "name") ?? extracted.name)
     const whatsapp = coalesceString(getStringField(json, "whatsapp") ?? extracted.whatsapp)
 
-    if (!email || !name || !whatsapp) {
-      console.error("[google-forms] Missing required fields", { email, name, whatsapp })
+    if (!email && !whatsapp) {
+      console.error("[google-forms] Missing required fields - need either email or WhatsApp", { email, name, whatsapp })
       return NextResponse.json({
-        error: "Missing required fields",
+        error: "Missing required fields - need either email or WhatsApp",
         received: { email, name, whatsapp },
       }, { status: 400 })
     }
