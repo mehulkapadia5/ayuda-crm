@@ -16,7 +16,8 @@ interface WhatsAppChatDrawerProps {
 }
 
 export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDrawerProps) {
-  const [open, setOpen] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [desktopOpen, setDesktopOpen] = useState(false)
   const [messages, setMessages] = useState<Array<{ id: string; text: string; timestamp: Date; sent: boolean }>>([])
 
   // Mock conversation history - in real implementation, this would come from your chat system
@@ -39,7 +40,7 @@ export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDraw
 
   const allMessages = [...mockMessages, ...messages].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime())
 
-  const ChatContent = () => (
+  const ChatContent = ({ onClose }: { onClose: () => void }) => (
     <>
       <div className="flex items-center justify-between border-b p-4">
         <div className="flex items-center gap-2">
@@ -51,7 +52,7 @@ export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDraw
             </div>
           </div>
         </div>
-        <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
+        <Button variant="ghost" size="sm" onClick={onClose}>
           <IconX className="h-4 w-4" />
         </Button>
       </div>
@@ -93,7 +94,7 @@ export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDraw
     <>
       {/* Mobile Drawer */}
       <div className="md:hidden">
-        <Drawer open={open} onOpenChange={setOpen}>
+        <Drawer open={mobileOpen} onOpenChange={setMobileOpen}>
           <DrawerTrigger asChild>
             <Button variant="outline" className="w-full justify-start gap-2">
               <IconMessageCircle className="h-4 w-4" />
@@ -101,14 +102,14 @@ export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDraw
             </Button>
           </DrawerTrigger>
           <DrawerContent className="h-[80vh]">
-            <ChatContent />
+            <ChatContent onClose={() => setMobileOpen(false)} />
           </DrawerContent>
         </Drawer>
       </div>
 
       {/* Desktop Sheet */}
       <div className="hidden md:block">
-        <Sheet open={open} onOpenChange={setOpen}>
+        <Sheet open={desktopOpen} onOpenChange={setDesktopOpen}>
           <SheetTrigger asChild>
             <Button variant="outline" className="w-full justify-start gap-2">
               <IconMessageCircle className="h-4 w-4" />
@@ -117,7 +118,7 @@ export function WhatsAppChatDrawer({ phone, leadId, leadName }: WhatsAppChatDraw
           </SheetTrigger>
           <SheetContent side="right" className="w-[400px] sm:w-[540px] p-0">
             <div className="flex flex-col h-full">
-              <ChatContent />
+              <ChatContent onClose={() => setDesktopOpen(false)} />
             </div>
           </SheetContent>
         </Sheet>
