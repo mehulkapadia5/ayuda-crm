@@ -71,7 +71,8 @@ export async function GET(request: Request) {
       const leadId = change.lead_id
       const details = change.details as Record<string, unknown>
       
-      if (details && details.from_stage && details.to_stage) {
+      if (details && details.from_stage && details.to_stage && 
+          typeof details.from_stage === 'string' && typeof details.to_stage === 'string') {
         if (!leadJourneys[leadId]) {
           leadJourneys[leadId] = ["Lead"]
         }
