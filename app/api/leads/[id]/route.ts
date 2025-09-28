@@ -12,7 +12,7 @@ const updateLeadSchema = z.object({
 
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const json = await request.json().catch(() => null)
@@ -26,7 +26,7 @@ export async function PUT(
     }
 
     const supabase = getServiceClient()
-    const leadId = params.id
+    const { id: leadId } = await params
 
     // Get current lead to check for stage changes
     const { data: currentLead, error: fetchError } = await supabase
@@ -82,11 +82,11 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const supabase = getServiceClient()
-    const leadId = params.id
+    const { id: leadId } = await params
 
     // Delete the lead (activities and follow-ups will be deleted automatically due to foreign key constraints)
     const { error } = await supabase
