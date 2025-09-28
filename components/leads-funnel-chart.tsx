@@ -68,26 +68,26 @@ export function LeadsFunnelChart() {
       step: "Leads", 
       count: funnelData.leads, 
       conversion: "100%",
-      color: "var(--chart-1)"
+      color: "hsl(var(--muted-foreground))"
     },
     { 
       step: "Prospects", 
       count: funnelData.prospects, 
       conversion: `${leadsToProspectsRate}%`,
-      color: "var(--chart-2)"
+      color: "hsl(var(--muted-foreground))"
     },
     { 
       step: "Enrolled", 
       count: funnelData.enrolled, 
       conversion: `${prospectsToEnrolledRate}%`,
-      color: "var(--chart-3)"
+      color: "hsl(var(--muted-foreground))"
     },
   ]
 
   const chartConfig = {
     count: {
       label: "Count",
-      color: "hsl(var(--primary))",
+      color: "hsl(var(--muted-foreground))",
     },
   } satisfies ChartConfig
 
@@ -179,7 +179,7 @@ export function LeadsFunnelChart() {
                 />
                 <Bar 
                   dataKey="count" 
-                  fill="var(--color-count)" 
+                  fill="hsl(var(--muted-foreground))" 
                   radius={8}
                   maxBarSize={80}
                 >
