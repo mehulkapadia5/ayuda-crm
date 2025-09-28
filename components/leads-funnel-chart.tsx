@@ -192,21 +192,6 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
               </BarChart>
             </ChartContainer>
 
-            {/* Summary Stats */}
-            <div className="grid grid-cols-3 gap-4 pt-4 border-t">
-              <div className="text-center">
-                <div className="text-lg font-semibold">{funnelData.leads - funnelData.prospects}</div>
-                <div className="text-xs text-muted-foreground">Lost at Qualification</div>
-              </div>
-              <div className="text-center">
-                <div className="text-lg font-semibold">{funnelData.prospects - funnelData.enrolled}</div>
-                <div className="text-xs text-muted-foreground">Lost at Enrollment</div>
-              </div>
-              <div className="text-center">
-                <div className="text-lg font-semibold">{funnelData.enrolled}</div>
-                <div className="text-xs text-muted-foreground">Total Enrolled</div>
-              </div>
-            </div>
 
             {/* Date Range Info */}
             <div className="text-center text-xs text-muted-foreground">
