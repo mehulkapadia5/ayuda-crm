@@ -28,7 +28,9 @@ export function SendWhatsAppForm({ phone, leadId, onMessageSent, compact = false
         body: JSON.stringify({ to: phone, message, leadId }),
       })
       if (!res.ok) {
-        alert("Failed to send message")
+        const errorData = await res.json().catch(() => ({}))
+        console.error("Send message error:", errorData)
+        alert(`Failed to send message: ${errorData.error || `HTTP ${res.status}: ${res.statusText}`}`)
         return
       }
       
@@ -39,7 +41,7 @@ export function SendWhatsAppForm({ phone, leadId, onMessageSent, compact = false
       }
     } catch (error) {
       console.error("Failed to send message:", error)
-      alert("Failed to send message")
+      alert(`Failed to send message: ${error instanceof Error ? error.message : 'Network error'}`)
     } finally {
       setLoading(false)
     }

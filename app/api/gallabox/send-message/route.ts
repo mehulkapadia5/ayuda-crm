@@ -44,7 +44,19 @@ export async function POST(req: Request) {
   })
 
   const gb = await res.json().catch(() => ({}))
-  if (!res.ok) return NextResponse.json({ error: gb }, { status: 502 })
+  if (!res.ok) {
+    console.error("Gallabox API error:", {
+      status: res.status,
+      statusText: res.statusText,
+      response: gb,
+      payload
+    })
+    return NextResponse.json({ 
+      error: `Gallabox API error: ${res.status} ${res.statusText}`,
+      details: gb,
+      payload 
+    }, { status: 502 })
+  }
 
   // Log activity
   try {
