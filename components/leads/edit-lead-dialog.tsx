@@ -80,7 +80,7 @@ export function EditLeadDialog({ lead, onLeadUpdated, children }: EditLeadDialog
             value={form.source} 
             onChange={(e) => setForm({ ...form, source: e.target.value })} 
           />
-          <Select value={form.stage} onValueChange={(v) => setForm({ ...form, stage: v as any })}>
+          <Select value={form.stage} onValueChange={(v) => setForm({ ...form, stage: v as "Lead" | "Prospect" | "Enrolled" | "Rejected" | "Next Cohort" })}>
             <SelectTrigger><SelectValue placeholder="Stage" /></SelectTrigger>
             <SelectContent>
               {['Lead','Prospect','Enrolled','Rejected','Next Cohort'].map(s => (
