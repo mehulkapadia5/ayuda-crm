@@ -148,15 +148,15 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
             <div className="text-sm">Loading funnel data...</div>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* Overall Conversion */}
             <div className="text-center">
               <div className="text-sm text-muted-foreground">Overall Conversion</div>
-              <div className="text-2xl font-bold text-primary">{overallConversionRate}%</div>
+              <div className="text-xl font-bold text-primary">{overallConversionRate}%</div>
             </div>
 
             {/* Funnel Bar Chart */}
-            <ChartContainer config={chartConfig}>
+            <ChartContainer config={chartConfig} className="h-[200px]">
               <BarChart
                 accessibilityLayer
                 data={chartData}

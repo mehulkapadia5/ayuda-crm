@@ -69,7 +69,7 @@ export async function GET(request: Request) {
     // Process stage changes chronologically
     stageChanges?.forEach(change => {
       const leadId = change.lead_id
-      const details = change.details as any
+      const details = change.details as Record<string, unknown>
       
       if (details && details.from_stage && details.to_stage) {
         if (!leadJourneys[leadId]) {

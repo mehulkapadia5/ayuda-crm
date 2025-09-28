@@ -2,10 +2,6 @@ import { AppSidebar } from "@/components/app-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { getServiceClient } from "@/lib/supabase/server"
-import { LeadProfile } from "@/components/leads/lead-profile"
-import { LeadActions } from "@/components/leads/lead-actions"
-import { ActivitiesFeed } from "@/components/leads/activities-feed"
-import { Suspense } from "react"
 import { LeadDetailClient } from "@/components/leads/lead-detail-client"
 
 export default async function LeadDetail({ params }: { params: { id: string } }) {
@@ -32,7 +28,7 @@ export default async function LeadDetail({ params }: { params: { id: string } })
           <div className="flex flex-1 flex-col gap-4 p-4 lg:p-6">
             <div className="text-center py-8 text-muted-foreground">
               <div className="text-lg">Lead not found</div>
-              <div className="text-sm">The lead you're looking for doesn't exist or has been deleted.</div>
+              <div className="text-sm">The lead you&apos;re looking for doesn&apos;t exist or has been deleted.</div>
             </div>
           </div>
         </SidebarInset>

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { WhatsAppChatDrawer } from "./whatsapp-chat-drawer"
 import { FollowUpDialog } from "./follow-up-dialog"
 import { EditLeadDialog } from "./edit-lead-dialog"
-import { IconMessageCircle, IconCalendar, IconPhone, IconEdit } from "@tabler/icons-react"
+import { IconPhone, IconEdit } from "@tabler/icons-react"
 import { Lead } from "@/lib/supabase/server"
 
 interface LeadActionsProps {
