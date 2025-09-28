@@ -46,7 +46,7 @@ export function LeadsFunnelChart() {
 
   useEffect(() => {
     fetchFunnelData()
-  }, [startDate, endDate])
+  }, [fetchFunnelData])
 
   const handleDateRangeChange = (range: { from?: Date, to?: Date }) => {
     if (range.from) setStartDate(range.from)

@@ -40,7 +40,7 @@ export function LeadProfile({ lead, onStageChange }: LeadProfileProps) {
         body: JSON.stringify({ stage: newStage }),
       })
       if (res.ok) {
-        setStage(newStage)
+        setStage(newStage as "Lead" | "Prospect" | "Enrolled" | "Rejected" | "Next Cohort")
         onStageChange?.(newStage)
       }
     } catch (error) {
