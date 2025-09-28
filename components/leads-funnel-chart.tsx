@@ -3,9 +3,8 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Badge } from "@/components/ui/badge"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
 import { IconCalendar } from "@tabler/icons-react"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 import {
@@ -14,6 +13,8 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
+import { format, subMonths } from "date-fns"
+import { cn } from "@/lib/utils"
 
 interface FunnelData {
   leads: number
@@ -28,19 +29,14 @@ interface LeadsFunnelChartProps {
 export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
   const [funnelData, setFunnelData] = useState<FunnelData>({ leads: 0, prospects: 0, enrolled: 0 })
   const [loading, setLoading] = useState(true)
-  const [startDate, setStartDate] = useState(() => {
-    const date = new Date()
-    date.setMonth(date.getMonth() - 1) // Default to last month
-    return date.toISOString().split('T')[0]
-  })
-  const [endDate, setEndDate] = useState(() => {
-    return new Date().toISOString().split('T')[0]
-  })
+  const [startDate, setStartDate] = useState<Date>(subMonths(new Date(), 1))
+  const [endDate, setEndDate] = useState<Date>(new Date())
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
   const fetchFunnelData = async () => {
     setLoading(true)
     try {
-      const res = await fetch(`/api/analytics/funnel?startDate=${startDate}&endDate=${endDate}`)
+      const res = await fetch(`/api/analytics/funnel?startDate=${format(startDate, 'yyyy-MM-dd')}&endDate=${format(endDate, 'yyyy-MM-dd')}`)
       if (res.ok) {
         const data = await res.json()
         setFunnelData(data)
@@ -56,11 +52,9 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
     fetchFunnelData()
   }, [startDate, endDate])
 
-  const handleDateRangeUpdate = () => {
-    if (onDateRangeChange) {
-      onDateRangeChange(startDate, endDate)
-    }
-    fetchFunnelData()
+  const handleDateRangeChange = (range: { from?: Date, to?: Date }) => {
+    if (range.from) setStartDate(range.from)
+    if (range.to) setEndDate(range.to)
   }
 
   const calculateConversionRate = (from: number, to: number) => {
@@ -105,34 +99,48 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <IconCalendar className="h-5 w-5" />
           Lead Conversion Funnel
+          <div className="ml-auto">
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "w-[280px] justify-start text-left font-normal",
+                    !startDate && "text-muted-foreground"
+                  )}
+                >
+                  <IconCalendar className="mr-2 h-4 w-4" />
+                  {startDate ? (
+                    endDate ? (
+                      `${format(startDate, "LLL dd, y")} - ${format(
+                        endDate,
+                        "LLL dd, y"
+                      )}`
+                    ) : (
+                      format(startDate, "LLL dd, y")
+                    )
+                  ) : (
+                    <span>Pick a date range</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="end">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  defaultMonth={startDate}
+                  selected={{ from: startDate, to: endDate }}
+                  onSelect={handleDateRangeChange}
+                  numberOfMonths={2}
+                />
+                <div className="p-4 flex justify-end">
+                  <Button onClick={() => setIsCalendarOpen(false)}>Apply</Button>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
         </CardTitle>
-        <div className="flex flex-wrap items-center gap-4 mt-4">
-          <div className="flex items-center gap-2">
-            <Label htmlFor="startDate" className="text-sm">From:</Label>
-            <Input
-              id="startDate"
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              className="w-[140px]"
-            />
-          </div>
-          <div className="flex items-center gap-2">
-            <Label htmlFor="endDate" className="text-sm">To:</Label>
-            <Input
-              id="endDate"
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              className="w-[140px]"
-            />
-          </div>
-          <Button onClick={handleDateRangeUpdate} size="sm">
-            Update
-          </Button>
-        </div>
       </CardHeader>
       <CardContent>
         {loading ? (
@@ -195,7 +203,7 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
 
             {/* Date Range Info */}
             <div className="text-center text-xs text-muted-foreground">
-              Showing data from {new Date(startDate).toLocaleDateString()} to {new Date(endDate).toLocaleDateString()}
+              Showing data from {format(startDate, "MMM dd, yyyy")} to {format(endDate, "MMM dd, yyyy")}
             </div>
           </div>
         )}
