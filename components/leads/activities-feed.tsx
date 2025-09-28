@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { AddActivityDialog } from "./add-activity-dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface Activity {
   id: string
@@ -69,52 +70,49 @@ export function ActivitiesFeed({ activities, leadId }: ActivitiesFeedProps) {
         <CardTitle className="text-base font-medium">Activity Feed</CardTitle>
         <AddActivityDialog leadId={leadId} />
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {activities.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <div className="text-2xl mb-2">📋</div>
-              <div className="text-sm">No activities yet</div>
-              <div className="text-xs">Add your first activity to get started</div>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {activities.map((activity, index) => (
-                <div key={activity.id} className="relative">
-                  {/* Timeline line */}
-                  {index < activities.length - 1 && (
-                    <div className="absolute left-4 top-8 w-px h-8 bg-border" />
-                  )}
-                  
-                  <div className="flex gap-3">
-                    {/* Activity icon */}
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted flex items-center justify-center text-sm">
-                      {getActivityIcon(activity.type)}
-                    </div>
-                    
-                    {/* Activity content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-1">
-                        <Badge variant="secondary" className="text-xs">
-                          {activity.type}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {formatTimestamp(activity.created_at)}
-                        </span>
+      <CardContent className="p-0">
+        {activities.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground px-6">
+            <div className="text-2xl mb-2">📋</div>
+            <div className="text-sm">No activities yet</div>
+            <div className="text-xs">Add your first activity to get started</div>
+          </div>
+        ) : (
+          <ScrollArea className="h-[500px] px-6">
+            <div className="space-y-4 py-4">
+              {activities.map((activity) => (
+                <Card key={activity.id} className="border-l-4 border-l-primary/20">
+                  <CardContent className="p-4">
+                    <div className="flex items-start gap-3">
+                      {/* Activity icon */}
+                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
+                        {getActivityIcon(activity.type)}
                       </div>
                       
-                      {formatDetails(activity.details) && (
-                        <div className="space-y-1 text-sm">
-                          {formatDetails(activity.details)}
+                      {/* Activity content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Badge variant="secondary" className="text-xs">
+                            {activity.type}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">
+                            {formatTimestamp(activity.created_at)}
+                          </span>
                         </div>
-                      )}
+                        
+                        {formatDetails(activity.details) && (
+                          <div className="space-y-1 text-sm">
+                            {formatDetails(activity.details)}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
-          )}
-        </div>
+          </ScrollArea>
+        )}
       </CardContent>
     </Card>
   )
