@@ -5,9 +5,19 @@ import { Lead } from "@/lib/supabase/server"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { IconDots, IconEdit, IconTrash } from "@tabler/icons-react"
 import Link from "next/link"
+import { EditLeadDialog } from "./edit-lead-dialog"
+import { DeleteLeadDialog } from "./delete-lead-dialog"
 
-export function LeadsTable({ data }: { data: Lead[] | null }) {
+interface LeadsTableProps {
+  data: Lead[] | null
+  onLeadUpdated?: () => void
+}
+
+export function LeadsTable({ data, onLeadUpdated }: LeadsTableProps) {
   const [stage, setStage] = useState<string>("")
   const [name, setName] = useState("")
   const [source, setSource] = useState("")
@@ -46,6 +56,7 @@ export function LeadsTable({ data }: { data: Lead[] | null }) {
             <TableHead>Source</TableHead>
             <TableHead>Stage</TableHead>
             <TableHead>Created</TableHead>
+            <TableHead className="w-[50px]">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -72,19 +83,69 @@ export function LeadsTable({ data }: { data: Lead[] | null }) {
                 </Link>
               </TableCell>
               <TableCell>
-                <Link href={`/leads/${l.id}`} className="block w-full">
-                  {l.stage}
-                </Link>
+                <Select 
+                  value={l.stage} 
+                  onValueChange={async (newStage) => {
+                    try {
+                      const res = await fetch(`/api/leads/${l.id}`, {
+                        method: "PUT",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ stage: newStage }),
+                      })
+                      if (res.ok && onLeadUpdated) {
+                        onLeadUpdated()
+                      }
+                    } catch (error) {
+                      console.error('Failed to update stage:', error)
+                    }
+                  }}
+                >
+                  <SelectTrigger className="w-[120px]">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['Lead','Prospect','Enrolled','Rejected','Next Cohort'].map(s => (
+                      <SelectItem key={s} value={s}>{s}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </TableCell>
               <TableCell>
                 <Link href={`/leads/${l.id}`} className="block w-full">
                   {new Date(l.created_at).toLocaleString()}
                 </Link>
               </TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                      <IconDots className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem asChild>
+                      <EditLeadDialog lead={l} onLeadUpdated={onLeadUpdated}>
+                        <div className="flex items-center">
+                          <IconEdit className="mr-2 h-4 w-4" />
+                          Edit
+                        </div>
+                      </EditLeadDialog>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <DeleteLeadDialog lead={l} onLeadDeleted={onLeadUpdated}>
+                        <div className="flex items-center text-destructive">
+                          <IconTrash className="mr-2 h-4 w-4" />
+                          Delete
+                        </div>
+                      </DeleteLeadDialog>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
             </TableRow>
           ))}
           {filtered.length === 0 && (
-            <TableRow><TableCell colSpan={6} className="text-center text-sm text-muted-foreground">No leads match filters.</TableCell></TableRow>
+            <TableRow><TableCell colSpan={7} className="text-center text-sm text-muted-foreground">No leads match filters.</TableCell></TableRow>
           )}
         </TableBody>
       </Table>

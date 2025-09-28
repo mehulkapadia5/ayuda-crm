@@ -50,7 +50,7 @@ export default function LeadsPage() {
               <div className="text-sm">Loading leads...</div>
             </div>
           ) : (
-            <LeadsTable data={leads} />
+            <LeadsTable data={leads} onLeadUpdated={fetchLeads} />
           )}
         </div>
       </SidebarInset>
