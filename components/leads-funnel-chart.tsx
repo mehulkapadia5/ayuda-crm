@@ -105,7 +105,7 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Funnel Steps - Bar Chart Style */}
+            {/* Horizontal Funnel Steps */}
             <div className="space-y-6">
               {/* Overall Conversion */}
               <div className="text-center">
@@ -113,82 +113,58 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
                 <div className="text-2xl font-bold text-primary">{overallConversionRate}%</div>
               </div>
 
-              {/* Funnel Bars */}
-              <div className="space-y-4">
+              {/* Horizontal Funnel */}
+              <div className="flex items-center justify-center space-x-4">
                 {/* Step 1: Leads */}
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                      <div>
-                        <div className="font-medium">Leads</div>
-                        <div className="text-sm text-muted-foreground">Initial inquiries</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-lg font-bold">{funnelData.leads.toLocaleString()}</div>
-                      <div className="text-sm text-muted-foreground">100%</div>
-                    </div>
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="w-16 h-16 bg-blue-500 text-white rounded-full flex items-center justify-center text-lg font-bold">1</div>
+                  <div className="text-center">
+                    <div className="font-medium text-sm">Leads</div>
+                    <div className="text-xs text-muted-foreground">{funnelData.leads.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground">100%</div>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-8">
-                    <div 
-                      className="bg-blue-500 h-8 rounded-full flex items-center justify-end pr-3"
-                      style={{ width: '100%' }}
-                    >
-                      <span className="text-white text-sm font-medium">100%</span>
-                    </div>
-                  </div>
+                </div>
+
+                {/* Arrow 1 */}
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="text-xs text-muted-foreground">{leadsToProspectsRate}%</div>
+                  <div className="w-8 h-0.5 bg-gray-300"></div>
+                  <div className="w-0 h-0 border-l-4 border-l-gray-300 border-t-2 border-t-transparent border-b-2 border-b-transparent"></div>
                 </div>
 
                 {/* Step 2: Prospects */}
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
-                      <div>
-                        <div className="font-medium">Prospects</div>
-                        <div className="text-sm text-muted-foreground">Qualified leads</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-lg font-bold">{funnelData.prospects.toLocaleString()}</div>
-                      <div className="text-sm text-muted-foreground">{leadsToProspectsRate}% from previous</div>
-                    </div>
-                  </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-8">
-                    <div 
-                      className="bg-yellow-500 h-8 rounded-full flex items-center justify-end pr-3"
-                      style={{ width: `${leadsToProspectsRate}%` }}
-                    >
-                      <span className="text-white text-sm font-medium">{leadsToProspectsRate}%</span>
-                    </div>
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="w-16 h-16 bg-yellow-500 text-white rounded-full flex items-center justify-center text-lg font-bold">2</div>
+                  <div className="text-center">
+                    <div className="font-medium text-sm">Prospects</div>
+                    <div className="text-xs text-muted-foreground">{funnelData.prospects.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground">{leadsToProspectsRate}%</div>
                   </div>
                 </div>
 
+                {/* Arrow 2 */}
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="text-xs text-muted-foreground">{prospectsToEnrolledRate}%</div>
+                  <div className="w-8 h-0.5 bg-gray-300"></div>
+                  <div className="w-0 h-0 border-l-4 border-l-gray-300 border-t-2 border-t-transparent border-b-2 border-b-transparent"></div>
+                </div>
+
                 {/* Step 3: Enrolled */}
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
-                      <div>
-                        <div className="font-medium">Enrolled</div>
-                        <div className="text-sm text-muted-foreground">Converted customers</div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-lg font-bold">{funnelData.enrolled.toLocaleString()}</div>
-                      <div className="text-sm text-muted-foreground">{prospectsToEnrolledRate}% from previous</div>
-                    </div>
-                  </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-8">
-                    <div 
-                      className="bg-green-500 h-8 rounded-full flex items-center justify-end pr-3"
-                      style={{ width: `${prospectsToEnrolledRate}%` }}
-                    >
-                      <span className="text-white text-sm font-medium">{prospectsToEnrolledRate}%</span>
-                    </div>
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="w-16 h-16 bg-green-500 text-white rounded-full flex items-center justify-center text-lg font-bold">3</div>
+                  <div className="text-center">
+                    <div className="font-medium text-sm">Enrolled</div>
+                    <div className="text-xs text-muted-foreground">{funnelData.enrolled.toLocaleString()}</div>
+                    <div className="text-xs text-muted-foreground">{prospectsToEnrolledRate}%</div>
                   </div>
                 </div>
+              </div>
+
+              {/* Step Descriptions */}
+              <div className="grid grid-cols-3 gap-4 text-center text-xs text-muted-foreground">
+                <div>Initial inquiries</div>
+                <div>Qualified leads</div>
+                <div>Converted customers</div>
               </div>
             </div>
 
