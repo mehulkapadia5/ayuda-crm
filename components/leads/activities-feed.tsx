@@ -55,7 +55,7 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
     }
   }
 
-  const formatDetails = (details: Record<string, unknown>, type: string) => {
+  const formatDetails = (details: Record<string, unknown>, type: string): React.ReactNode => {
     if (!details || Object.keys(details).length === 0) return null
     
     if (typeof details === 'string') return details
@@ -100,7 +100,7 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
       )
     }
     
-    return Object.entries(details).map(([key, value]) => {
+    const entries = Object.entries(details).map(([key, value]) => {
       if (!value || value === '') return null
       
       return (
@@ -116,7 +116,9 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
           </span>
         </div>
       )
-    }).filter(Boolean) as React.ReactNode[]
+    }).filter(Boolean)
+    
+    return entries.length > 0 ? entries : null
   }
 
   const handleActivityUpdated = () => {
