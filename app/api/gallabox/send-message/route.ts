@@ -23,7 +23,12 @@ export async function POST(req: Request) {
 
   const baseUrl = process.env.GALLABOX_BASE_URL || "https://backend.gallabox.com"
   const apiKey = process.env.GALLABOX_API_KEY
-  if (!apiKey) return NextResponse.json({ error: "Missing GALLABOX_API_KEY" }, { status: 500 })
+  if (!apiKey) {
+    console.error("Missing GALLABOX_API_KEY environment variable")
+    return NextResponse.json({ error: "Missing GALLABOX_API_KEY" }, { status: 500 })
+  }
+  
+  console.log("Using Gallabox API key:", apiKey.substring(0, 8) + "...")
 
   // Prepare Gallabox payloads (simplified)
   const url = template
@@ -34,6 +39,8 @@ export async function POST(req: Request) {
     ? { to, template }
     : { to, message: message || "" }
 
+  console.log("Sending to Gallabox:", { url, payload })
+  
   const res = await fetch(url, {
     method: "POST",
     headers: {
