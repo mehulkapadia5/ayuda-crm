@@ -1,36 +1,136 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ayuda CRM
+
+A modern Customer Relationship Management system built with Next.js, Supabase, and shadcn/ui components.
+
+## Features
+
+- **Lead Management**: Create, view, and manage leads
+- **Activity Tracking**: Log and track all lead interactions
+- **Follow-up System**: Schedule and manage follow-ups
+- **WhatsApp Integration**: Send messages directly from the CRM
+- **Google Forms Integration**: Automatically create leads from form submissions
+- **Dashboard Analytics**: View key metrics and conversion data
+- **Responsive Design**: Works on desktop and mobile devices
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React, TypeScript
+- **UI Components**: shadcn/ui, Tailwind CSS
+- **Backend**: Supabase (PostgreSQL, Auth, Storage)
+- **Deployment**: Vercel
+- **Icons**: Tabler Icons
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ 
+- npm or yarn
+- Supabase account
+
+### Installation
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/ayuda-crm.git
+   cd ayuda-crm
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**:
+   Create a `.env.local` file:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+   ```
+
+4. **Set up the database**:
+   - Run the SQL migrations in `supabase/migrations/`
+   - Or apply them manually in your Supabase dashboard
+
+5. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**:
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## Project Structure
+
+```
+my-app/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── dashboard/         # Dashboard page
+│   ├── leads/             # Leads pages
+│   └── ...
+├── components/            # React components
+│   ├── ui/               # shadcn/ui components
+│   ├── leads/            # Lead-specific components
+│   └── ...
+├── lib/                  # Utility functions
+├── supabase/             # Database migrations
+└── ...
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Dashboard**: Overview of metrics, conversion matrix, and follow-ups
+- **Leads Table**: List and filter all leads
+- **Lead Detail**: Individual lead view with activities and actions
+- **Add Lead Dialog**: Form to create new leads
+- **Follow-up System**: Schedule and manage follow-ups
+- **Activity Feed**: Timeline of all lead interactions
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Google Forms Integration
 
-## Learn More
+The CRM includes automated integration with Google Forms:
 
-To learn more about Next.js, take a look at the following resources:
+- **Webhook Endpoint**: `/api/webhooks/google-forms`
+- **Automatic Lead Creation**: Form submissions create leads automatically
+- **Duplicate Prevention**: Checks for existing emails
+- **Activity Tracking**: Logs form submissions as activities
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+See [GOOGLE-FORMS-INTEGRATION.md](./GOOGLE-FORMS-INTEGRATION.md) for setup instructions.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Deployment
 
-## Deploy on Vercel
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions to Vercel.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Database Schema
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Tables
+
+- **leads**: Lead information (name, email, phone, source, stage)
+- **activities**: Activity log (type, details, timestamp)
+- **follow_ups**: Follow-up scheduling (date, notes, completion status)
+
+### Migrations
+
+- `0001_init.sql`: Initial schema with leads and activities tables
+- `0002_follow_ups.sql`: Follow-ups table and triggers
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For support and questions:
+- Check the documentation files
+- Review the troubleshooting sections
+- Open an issue on GitHub
