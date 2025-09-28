@@ -13,10 +13,10 @@ export async function GET(request: Request) {
 
     const supabase = getServiceClient()
 
-    // Get leads created in the date range
+    // Get all leads that were created in the date range
     const { data: leads, error: leadsError } = await supabase
       .from("leads")
-      .select("id, stage, created_at")
+      .select("id, created_at")
       .gte("created_at", `${startDate}T00:00:00.000Z`)
       .lte("created_at", `${endDate}T23:59:59.999Z`)
 
@@ -29,46 +29,77 @@ export async function GET(request: Request) {
       }, { status: 500 })
     }
 
-    // Count leads by stage
-    const leadsCount = leads?.filter(lead => lead.stage === "Lead").length || 0
-    const prospectsCount = leads?.filter(lead => lead.stage === "Prospect").length || 0
-    const enrolledCount = leads?.filter(lead => lead.stage === "Enrolled").length || 0
+    const leadIds = leads?.map(lead => lead.id) || []
+    const totalLeads = leadIds.length
 
-    // Also check for leads that were created before the date range but converted during it
-    // This gives us a more accurate picture of the funnel
-    const { data: convertedLeads, error: convertedError } = await supabase
+    if (totalLeads === 0) {
+      return NextResponse.json({
+        leads: 0,
+        prospects: 0,
+        enrolled: 0
+      })
+    }
+
+    // Get all stage change activities for these leads
+    const { data: stageChanges, error: stageError } = await supabase
       .from("activities")
       .select("lead_id, created_at, details")
       .eq("type", "Lead Stage Changed")
-      .gte("created_at", `${startDate}T00:00:00.000Z`)
-      .lte("created_at", `${endDate}T23:59:59.999Z`)
+      .in("lead_id", leadIds)
+      .order("created_at", { ascending: true })
 
-    if (convertedError) {
-      console.error("Database error fetching conversions:", convertedError)
-      // Continue without conversion data rather than failing
+    if (stageError) {
+      console.error("Database error fetching stage changes:", stageError)
+      // Continue with basic counts if stage changes fail
+      return NextResponse.json({
+        leads: totalLeads,
+        prospects: 0,
+        enrolled: 0
+      })
     }
 
-    // Get current stage of leads that converted during the period
-    let additionalEnrolled = 0
-    let additionalProspects = 0
+    // Build historical funnel by tracking each lead's journey
+    const leadJourneys: { [leadId: string]: string[] } = {}
+    
+    // Initialize all leads as starting with "Lead" stage
+    leadIds.forEach(leadId => {
+      leadJourneys[leadId] = ["Lead"]
+    })
 
-    if (convertedLeads && convertedLeads.length > 0) {
-      const leadIds = convertedLeads.map(activity => activity.lead_id)
-      const { data: currentStages } = await supabase
-        .from("leads")
-        .select("id, stage")
-        .in("id", leadIds)
-
-      if (currentStages) {
-        additionalEnrolled = currentStages.filter(lead => lead.stage === "Enrolled").length
-        additionalProspects = currentStages.filter(lead => lead.stage === "Prospect").length
+    // Process stage changes chronologically
+    stageChanges?.forEach(change => {
+      const leadId = change.lead_id
+      const details = change.details as any
+      
+      if (details && details.from_stage && details.to_stage) {
+        if (!leadJourneys[leadId]) {
+          leadJourneys[leadId] = ["Lead"]
+        }
+        
+        // Add the new stage to the journey
+        if (!leadJourneys[leadId].includes(details.to_stage)) {
+          leadJourneys[leadId].push(details.to_stage)
+        }
       }
-    }
+    })
+
+    // Count leads that have reached each stage
+    let prospectsCount = 0
+    let enrolledCount = 0
+
+    Object.values(leadJourneys).forEach(journey => {
+      if (journey.includes("Prospect")) {
+        prospectsCount++
+      }
+      if (journey.includes("Enrolled")) {
+        enrolledCount++
+      }
+    })
 
     const funnelData = {
-      leads: leadsCount,
-      prospects: prospectsCount + additionalProspects,
-      enrolled: enrolledCount + additionalEnrolled
+      leads: totalLeads,
+      prospects: prospectsCount,
+      enrolled: enrolledCount
     }
 
     return NextResponse.json(funnelData)
