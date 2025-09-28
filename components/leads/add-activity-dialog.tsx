@@ -76,6 +76,7 @@ export function AddActivityDialog({ leadId, onActivityAdded }: { leadId: string,
               <SelectItem value="Proposal">📋 Proposal</SelectItem>
               <SelectItem value="Demo">🎯 Demo</SelectItem>
               <SelectItem value="Contract">📄 Contract</SelectItem>
+              <SelectItem value="Lead Stage Changed">🔄 Lead Stage Changed</SelectItem>
               <SelectItem value="Other">📌 Other</SelectItem>
             </SelectContent>
           </Select>

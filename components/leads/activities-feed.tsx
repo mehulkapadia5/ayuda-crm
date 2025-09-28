@@ -1,9 +1,14 @@
 "use client"
 
+import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { AddActivityDialog } from "./add-activity-dialog"
+import { EditActivityDialog } from "./edit-activity-dialog"
+import { DeleteActivityDialog } from "./delete-activity-dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { IconEdit, IconTrash, IconClock } from "@tabler/icons-react"
 
 interface Activity {
   id: string
@@ -19,6 +24,9 @@ interface ActivitiesFeedProps {
 }
 
 export function ActivitiesFeed({ activities, leadId, onActivityAdded }: ActivitiesFeedProps) {
+  const [editingActivity, setEditingActivity] = useState<Activity | null>(null)
+  const [deletingActivity, setDeletingActivity] = useState<Activity | null>(null)
+
   const getActivityIcon = (type: string) => {
     const icons: Record<string, string> = {
       Call: "📞",
@@ -30,6 +38,7 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
       Proposal: "📋",
       Demo: "🎯",
       Contract: "📄",
+      "Lead Stage Changed": "🔄",
       Other: "📌",
     }
     return icons[type] || "📌"
@@ -53,16 +62,69 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
     }
   }
 
-  const formatDetails = (details: Record<string, unknown>) => {
+  const formatDetails = (details: Record<string, unknown>, type: string) => {
     if (!details || Object.keys(details).length === 0) return null
     
     if (typeof details === 'string') return details
     
-    return Object.entries(details).map(([key, value]) => (
-      <div key={key} className="text-xs">
-        <span className="font-medium capitalize">{key}:</span> {String(value)}
-      </div>
-    ))
+    // Special formatting for Lead Stage Changed
+    if (type === 'Lead Stage Changed') {
+      return (
+        <div className="space-y-2">
+          {details.from_stage && details.to_stage && (
+            <div className="flex items-center gap-2 p-2 bg-primary/10 rounded-md">
+              <span className="text-sm font-medium text-primary">
+                {String(details.from_stage)} → {String(details.to_stage)}
+              </span>
+            </div>
+          )}
+          {details.change_time && (
+            <div className="flex items-start gap-2 py-1">
+              <span className="font-medium text-sm text-muted-foreground min-w-[80px]">
+                Time:
+              </span>
+              <span className="text-sm flex-1">
+                {String(details.change_time)}
+              </span>
+            </div>
+          )}
+          {details.reason && (
+            <div className="flex items-start gap-2 py-1">
+              <span className="font-medium text-sm text-muted-foreground min-w-[80px]">
+                Reason:
+              </span>
+              <span className="text-sm flex-1">
+                {String(details.reason)}
+              </span>
+            </div>
+          )}
+        </div>
+      )
+    }
+    
+    return Object.entries(details).map(([key, value]) => {
+      if (!value || value === '') return null
+      
+      return (
+        <div key={key} className="flex items-start gap-2 py-1">
+          <span className="font-medium text-sm text-muted-foreground capitalize min-w-[80px]">
+            {key.replace(/_/g, ' ')}:
+          </span>
+          <span className="text-sm flex-1">
+            {typeof value === 'string' && value.length > 100 
+              ? `${value.substring(0, 100)}...` 
+              : String(value)
+            }
+          </span>
+        </div>
+      )
+    }).filter(Boolean)
+  }
+
+  const handleActivityUpdated = () => {
+    if (onActivityAdded) {
+      onActivityAdded()
+    }
   }
 
   return (
@@ -80,41 +142,86 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
           </div>
         ) : (
           <ScrollArea className="h-[500px] px-6">
-            <div className="space-y-4 py-4">
-              {activities.map((activity) => (
-                <Card key={activity.id} className="border-l-4 border-l-primary/20">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      {/* Activity icon */}
-                      <div className="flex-shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center text-lg">
-                        {getActivityIcon(activity.type)}
-                      </div>
-                      
-                      {/* Activity content */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
+            <div className="relative">
+              {/* Timeline line */}
+              <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-border"></div>
+              
+              <div className="space-y-6 py-4">
+                {activities.map((activity, index) => (
+                  <div key={activity.id} className="relative flex items-start gap-4">
+                    {/* Timeline dot */}
+                    <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center text-lg">
+                      {getActivityIcon(activity.type)}
+                    </div>
+                    
+                    {/* Activity content */}
+                    <div className="flex-1 min-w-0 bg-muted/30 rounded-lg p-4 border">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center gap-2">
                           <Badge variant="secondary" className="text-xs">
                             {activity.type}
                           </Badge>
-                          <span className="text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <IconClock className="w-3 h-3" />
                             {formatTimestamp(activity.created_at)}
-                          </span>
+                          </div>
                         </div>
                         
-                        {formatDetails(activity.details) && (
-                          <div className="space-y-1 text-sm">
-                            {formatDetails(activity.details)}
-                          </div>
-                        )}
+                        {/* Action buttons */}
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setEditingActivity(activity)}
+                            className="h-6 w-6 p-0"
+                          >
+                            <IconEdit className="w-3 h-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setDeletingActivity(activity)}
+                            className="h-6 w-6 p-0 text-destructive hover:text-destructive"
+                          >
+                            <IconTrash className="w-3 h-3" />
+                          </Button>
+                        </div>
                       </div>
+                      
+                      {/* Activity details */}
+                      {formatDetails(activity.details, activity.type) && (
+                        <div className="space-y-2">
+                          {formatDetails(activity.details, activity.type)}
+                        </div>
+                      )}
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                  </div>
+                ))}
+              </div>
             </div>
           </ScrollArea>
         )}
       </CardContent>
+
+      {/* Edit Activity Dialog */}
+      {editingActivity && (
+        <EditActivityDialog
+          activity={editingActivity}
+          open={!!editingActivity}
+          onOpenChange={(open) => !open && setEditingActivity(null)}
+          onActivityUpdated={handleActivityUpdated}
+        />
+      )}
+
+      {/* Delete Activity Dialog */}
+      {deletingActivity && (
+        <DeleteActivityDialog
+          activity={deletingActivity}
+          open={!!deletingActivity}
+          onOpenChange={(open) => !open && setDeletingActivity(null)}
+          onActivityDeleted={handleActivityUpdated}
+        />
+      )}
     </Card>
   )
 }
