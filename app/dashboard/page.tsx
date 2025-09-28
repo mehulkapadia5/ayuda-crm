@@ -5,6 +5,9 @@ import { FollowUpsList } from "@/components/follow-ups-list"
 import { SiteHeader } from "@/components/site-header"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
+export const dynamic = 'force-dynamic' // Make the page dynamic
+export const revalidate = 0 // Prevent prerendering
+
 export default function Page() {
   return (
     <SidebarProvider
