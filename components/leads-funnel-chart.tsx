@@ -129,6 +129,7 @@ export function LeadsFunnelChart() {
                   selected={{ from: startDate, to: endDate }}
                   onSelect={handleDateRangeChange}
                   numberOfMonths={2}
+                  required
                 />
                 <div className="p-4 flex justify-end">
                   <Button onClick={() => setIsCalendarOpen(false)}>Apply</Button>
