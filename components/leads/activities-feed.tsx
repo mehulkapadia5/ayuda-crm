@@ -111,7 +111,7 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
           </span>
         </div>
       )
-    }).filter(Boolean)
+    }).filter(Boolean) as React.ReactNode[]
   }
 
   const handleActivityUpdated = () => {
@@ -140,7 +140,7 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
               <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-border"></div>
               
               <div className="space-y-6 py-4">
-                {activities.map((activity, index) => (
+                {activities.map((activity) => (
                   <div key={activity.id} className="relative flex items-start gap-4">
                     {/* Timeline dot */}
                     <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-md bg-background border-2 border-primary/20 flex items-center justify-center text-muted-foreground">
