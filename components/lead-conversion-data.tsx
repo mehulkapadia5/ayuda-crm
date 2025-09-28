@@ -43,16 +43,24 @@ export async function LeadConversionData() {
     }
   })
 
-  // Build the retention matrix
+  // Build the retention matrix with conversion percentages
   const retentionData: { [leadMonth: string]: { [conversionMonth: string]: number } } = {}
+  const leadCounts: { [leadMonth: string]: number } = {}
   const monthSet = new Set<string>()
 
-  // Process each lead
+  // First pass: count total leads per month
   leads.forEach(lead => {
     const leadDate = new Date(lead.created_at)
     const leadMonthName = leadDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
     
     monthSet.add(leadMonthName)
+    leadCounts[leadMonthName] = (leadCounts[leadMonthName] || 0) + 1
+  })
+
+  // Second pass: count conversions per month
+  leads.forEach(lead => {
+    const leadDate = new Date(lead.created_at)
+    const leadMonthName = leadDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 
     // Initialize lead month if not exists
     if (!retentionData[leadMonthName]) {
@@ -73,6 +81,14 @@ export async function LeadConversionData() {
       
       retentionData[leadMonthName][conversionMonthName]++
     }
+  })
+
+  // Convert counts to percentages
+  Object.keys(retentionData).forEach(leadMonth => {
+    const totalLeads = leadCounts[leadMonth] || 1
+    Object.keys(retentionData[leadMonth]).forEach(conversionMonth => {
+      retentionData[leadMonth][conversionMonth] = Math.round((retentionData[leadMonth][conversionMonth] / totalLeads) * 100)
+    })
   })
 
   // Sort months chronologically

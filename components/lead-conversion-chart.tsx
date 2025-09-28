@@ -43,7 +43,7 @@ export function LeadConversionChart({ data, months }: LeadConversionChartProps) 
           <CardTitle>Lead Conversion Matrix</CardTitle>
           <CardDescription>
             <span className="hidden @[540px]/card:block">
-              Shows when leads created in each month converted to &quot;Enrolled&quot; stage
+              Shows conversion percentages of leads created in each month to &quot;Enrolled&quot; stage
             </span>
             <span className="@[540px]/card:hidden">Lead Conversion Matrix</span>
           </CardDescription>
@@ -85,11 +85,11 @@ export function LeadConversionChart({ data, months }: LeadConversionChartProps) 
                             ? `hsl(var(--primary) / ${0.1 + intensity * 0.4})` 
                             : undefined
                         }}
-                        title={`${leadMonth} leads converted in ${conversionMonth}: ${value}`}
+                        title={`${leadMonth} leads converted in ${conversionMonth}: ${value}%`}
                       >
                         {value > 0 ? (
                           <Badge variant={isSameMonth ? "default" : "secondary"} className="text-xs">
-                            {value}
+                            {value}%
                           </Badge>
                         ) : (
                           <span className="text-muted-foreground">-</span>
