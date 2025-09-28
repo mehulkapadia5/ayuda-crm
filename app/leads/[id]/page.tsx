@@ -6,6 +6,7 @@ import { LeadProfile } from "@/components/leads/lead-profile"
 import { LeadActions } from "@/components/leads/lead-actions"
 import { ActivitiesFeed } from "@/components/leads/activities-feed"
 import { Suspense } from "react"
+import { LeadDetailClient } from "@/components/leads/lead-detail-client"
 
 export default async function LeadDetail({ params }: { params: { id: string } }) {
   const supabase = getServiceClient()
@@ -49,29 +50,11 @@ export default async function LeadDetail({ params }: { params: { id: string } })
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader title={lead.name || "Lead"} />
-        <div className="flex flex-1 flex-col gap-6 p-4 lg:p-6">
-          {/* Lead Profile Section */}
-          <Suspense fallback={<div className="h-48 bg-muted animate-pulse rounded-lg" />}>
-            <LeadProfile lead={lead} />
-          </Suspense>
-
-          {/* Main Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Actions Sidebar */}
-            <div className="lg:col-span-1">
-              <Suspense fallback={<div className="h-64 bg-muted animate-pulse rounded-lg" />}>
-                <LeadActions lead={lead} />
-              </Suspense>
-            </div>
-
-            {/* Activities Feed */}
-            <div className="lg:col-span-2">
-              <Suspense fallback={<div className="h-96 bg-muted animate-pulse rounded-lg" />}>
-                <ActivitiesFeed activities={activities} leadId={params.id} />
-              </Suspense>
-            </div>
-          </div>
-        </div>
+        <LeadDetailClient 
+          lead={lead} 
+          activities={activities} 
+          leadId={params.id} 
+        />
       </SidebarInset>
     </SidebarProvider>
   )

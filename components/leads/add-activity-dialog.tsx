@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogT
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
-export function AddActivityDialog({ leadId }: { leadId: string }) {
+export function AddActivityDialog({ leadId, onActivityAdded }: { leadId: string, onActivityAdded?: () => void }) {
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ type: "", details: "" })
@@ -39,7 +39,11 @@ export function AddActivityDialog({ leadId }: { leadId: string }) {
       }
       setOpen(false)
       setForm({ type: "", details: "" })
-      window.location.reload()
+      if (onActivityAdded) {
+        onActivityAdded()
+      } else {
+        window.location.reload()
+      }
     } catch (e) {
       console.error(e)
       alert(`Failed to add activity: ${e instanceof Error ? e.message : 'Unknown error'}`)

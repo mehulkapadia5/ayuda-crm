@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { WhatsAppChatDrawer } from "./whatsapp-chat-drawer"
 import { FollowUpDialog } from "./follow-up-dialog"
-import { IconMessageCircle, IconCalendar, IconPhone } from "@tabler/icons-react"
+import { EditLeadDialog } from "./edit-lead-dialog"
+import { IconMessageCircle, IconCalendar, IconPhone, IconEdit } from "@tabler/icons-react"
 import { Lead } from "@/lib/supabase/server"
 
 interface LeadActionsProps {
@@ -22,6 +23,14 @@ export function LeadActions({ lead, onActionCompleted }: LeadActionsProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Edit Lead */}
+        <EditLeadDialog lead={lead} onLeadUpdated={onActionCompleted}>
+          <Button variant="outline" className="w-full justify-start gap-2">
+            <IconEdit className="h-4 w-4" />
+            Edit Lead Details
+          </Button>
+        </EditLeadDialog>
+
         {/* WhatsApp Chat */}
         {lead.phone && (
           <WhatsAppChatDrawer

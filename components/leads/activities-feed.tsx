@@ -15,9 +15,10 @@ interface Activity {
 interface ActivitiesFeedProps {
   activities: Activity[]
   leadId: string
+  onActivityAdded?: () => void
 }
 
-export function ActivitiesFeed({ activities, leadId }: ActivitiesFeedProps) {
+export function ActivitiesFeed({ activities, leadId, onActivityAdded }: ActivitiesFeedProps) {
   const getActivityIcon = (type: string) => {
     const icons: Record<string, string> = {
       Call: "📞",
@@ -68,7 +69,7 @@ export function ActivitiesFeed({ activities, leadId }: ActivitiesFeedProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
         <CardTitle className="text-base font-medium">Activity Feed</CardTitle>
-        <AddActivityDialog leadId={leadId} />
+        <AddActivityDialog leadId={leadId} onActivityAdded={onActivityAdded} />
       </CardHeader>
       <CardContent className="p-0">
         {activities.length === 0 ? (
