@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
@@ -29,7 +29,7 @@ export function LeadsFunnelChart() {
   const [endDate, setEndDate] = useState<Date>(new Date())
   const [isCalendarOpen, setIsCalendarOpen] = useState(false)
 
-  const fetchFunnelData = async () => {
+  const fetchFunnelData = useCallback(async () => {
     setLoading(true)
     try {
       const res = await fetch(`/api/analytics/funnel?startDate=${format(startDate, 'yyyy-MM-dd')}&endDate=${format(endDate, 'yyyy-MM-dd')}`)
@@ -42,11 +42,11 @@ export function LeadsFunnelChart() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [startDate, endDate])
 
   useEffect(() => {
     fetchFunnelData()
-  }, [startDate, endDate, fetchFunnelData])
+  }, [fetchFunnelData])
 
   const handleDateRangeChange = (range: { from?: Date, to?: Date }) => {
     if (range.from) setStartDate(range.from)
