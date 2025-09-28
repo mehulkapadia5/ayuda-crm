@@ -82,7 +82,7 @@ export function AddActivityDialog({ leadId }: { leadId: string }) {
             rows={4}
           />
           <div className="text-xs text-muted-foreground">
-            You can enter simple text or JSON format like: &quot;{&quot;duration&quot;: &quot;30 minutes&quot;, &quot;outcome&quot;: &quot;interested&quot;}&quot;
+            You can enter simple text or JSON format like: {`{"duration": "30 minutes", "outcome": "interested"}`}
           </div>
         </div>
         <DialogFooter>
