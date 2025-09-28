@@ -156,13 +156,15 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
             </div>
 
             {/* Funnel Bar Chart */}
-            <ChartContainer config={chartConfig} className="h-[200px]">
+            <ChartContainer config={chartConfig} className="h-[200px] w-full">
               <BarChart
                 accessibilityLayer
                 data={chartData}
+                width={undefined}
+                height={200}
                 margin={{
                   top: 20,
-                  right: 30,
+                  right: 10,
                   left: 20,
                   bottom: 5,
                 }}
@@ -182,6 +184,7 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
                   dataKey="count" 
                   fill="var(--color-count)" 
                   radius={8}
+                  maxBarSize={80}
                 >
                   <LabelList
                     position="top"
