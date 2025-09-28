@@ -143,7 +143,7 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
                 {activities.map((activity, index) => (
                   <div key={activity.id} className="relative flex items-start gap-4">
                     {/* Timeline dot */}
-                    <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center text-muted-foreground">
+                    <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-md bg-background border-2 border-primary/20 flex items-center justify-center text-muted-foreground">
                       {getActivityIcon(activity.type)}
                     </div>
                     
