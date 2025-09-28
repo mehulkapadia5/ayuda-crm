@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { getServiceClient } from "@/lib/supabase/server"
 import { CreateCampaign } from "@/components/campaigns/create-campaign"
+import type { Campaign } from "@/lib/supabase/server"
 
 export default async function CampaignsPage() {
   const supabase = getServiceClient()
@@ -11,7 +12,7 @@ export default async function CampaignsPage() {
     .from("campaigns")
     .select("*")
     .order("created_at", { ascending: false })
-  const campaigns = data ?? []
+  const campaigns: Campaign[] = (data as Campaign[]) ?? []
 
   return (
     <SidebarProvider
@@ -31,7 +32,7 @@ export default async function CampaignsPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               {campaigns.length === 0 && <div className="text-muted-foreground">No campaigns yet.</div>}
-              {campaigns.map((c: Record<string, unknown>) => (
+              {campaigns.map((c: Campaign) => (
                 <div key={c.id} className="border rounded p-3">
                   <div className="flex items-center justify-between">
                     <div className="font-medium">{c.name}</div>
