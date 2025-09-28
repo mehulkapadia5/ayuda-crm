@@ -22,11 +22,7 @@ interface FunnelData {
   enrolled: number
 }
 
-interface LeadsFunnelChartProps {
-  onDateRangeChange?: (startDate: string, endDate: string) => void
-}
-
-export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
+export function LeadsFunnelChart() {
   const [funnelData, setFunnelData] = useState<FunnelData>({ leads: 0, prospects: 0, enrolled: 0 })
   const [loading, setLoading] = useState(true)
   const [startDate, setStartDate] = useState<Date>(subMonths(new Date(), 1))
@@ -50,7 +46,7 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
 
   useEffect(() => {
     fetchFunnelData()
-  }, [startDate, endDate])
+  }, [startDate, endDate, fetchFunnelData])
 
   const handleDateRangeChange = (range: { from?: Date, to?: Date }) => {
     if (range.from) setStartDate(range.from)
@@ -96,7 +92,7 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
   } satisfies ChartConfig
 
   return (
-    <Card>
+    <Card className="h-[400px]">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           Lead Conversion Funnel
@@ -142,7 +138,7 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="h-[calc(100%-4rem)]">
         {loading ? (
           <div className="text-center py-8 text-muted-foreground">
             <div className="text-sm">Loading funnel data...</div>
@@ -191,7 +187,7 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
                     offset={12}
                     className="fill-foreground"
                     fontSize={12}
-                    formatter={(value: number, entry: any) => {
+                    formatter={(value: number, entry: { payload?: { conversion?: string } }) => {
                       const conversion = entry?.payload?.conversion || "0%"
                       return [
                         `${value.toLocaleString()} (${conversion})`,

@@ -46,12 +46,12 @@ export function FollowUpsList() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="h-[400px]">
         <CardHeader>
           <CardTitle>Follow-ups</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
+        <CardContent className="h-[calc(100%-4rem)] flex items-center justify-center">
+          <div className="text-center text-muted-foreground">
             <div className="text-sm">Loading follow-ups...</div>
           </div>
         </CardContent>
@@ -61,12 +61,12 @@ export function FollowUpsList() {
 
   if (!followUps || followUps.length === 0) {
     return (
-      <Card>
+      <Card className="h-[400px]">
         <CardHeader>
           <CardTitle>Follow-ups</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-center py-8 text-muted-foreground">
+        <CardContent className="h-[calc(100%-4rem)] flex items-center justify-center">
+          <div className="text-center text-muted-foreground">
             <IconCalendar className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <div className="text-sm">No follow-ups scheduled</div>
             <div className="text-xs">Schedule follow-ups from individual lead pages</div>
@@ -172,11 +172,11 @@ export function FollowUpsList() {
   )
 
   return (
-    <Card>
+    <Card className="h-[400px]">
       <CardHeader>
         <CardTitle>Follow-ups</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="h-[calc(100%-4rem)] overflow-y-auto space-y-4">
         {overdue.length > 0 && (
           <div>
             <h4 className="text-sm font-medium text-destructive mb-2">Overdue ({overdue.length})</h4>

@@ -27,13 +27,9 @@ export default function Page() {
             <div className="flex flex-col gap-4 py-4 md:gap-6 md:py-6">
               <DashboardMetrics />
               <div className="px-4 lg:px-6">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="lg:col-span-2">
-                    <LeadsFunnelChart />
-                  </div>
-                  <div className="lg:col-span-1">
-                    <FollowUpsList />
-                  </div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <LeadsFunnelChart />
+                  <FollowUpsList />
                 </div>
               </div>
               <div className="px-4 lg:px-6">

@@ -1,12 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Avatar, AvatarFallback, AvatarInitials } from "@/components/ui/avatar"
-import { IconMail, IconPhone, IconCalendar, IconUser, IconMapPin } from "@tabler/icons-react"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { IconMail, IconPhone, IconCalendar, IconUser } from "@tabler/icons-react"
 import { Lead } from "@/lib/supabase/server"
 
 interface LeadProfileProps {

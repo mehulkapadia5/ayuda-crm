@@ -2,11 +2,10 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer"
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
-import { IconMessageCircle, IconSend, IconX } from "@tabler/icons-react"
+import { IconMessageCircle, IconX } from "@tabler/icons-react"
 import { SendWhatsAppForm } from "./send-whatsapp-form"
 
 interface WhatsAppChatDrawerProps {
