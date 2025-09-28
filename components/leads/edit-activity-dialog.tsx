@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { IconUser, IconRefresh, IconMessageCircle, IconPhone } from "@tabler/icons-react"
 
 interface Activity {
   id: string
@@ -31,52 +32,8 @@ export function EditActivityDialog({ activity, open, onOpenChange, onActivityUpd
 
   const getActivityFields = (type: string) => {
     const fields: Record<string, Array<{ key: string, label: string, type: 'text' | 'textarea' | 'select', options?: string[] }>> = {
-      Call: [
-        { key: 'duration', label: 'Duration', type: 'text' },
-        { key: 'outcome', label: 'Outcome', type: 'select', options: ['Interested', 'Not Interested', 'Follow-up Required', 'No Answer', 'Busy'] },
-        { key: 'notes', label: 'Notes', type: 'textarea' }
-      ],
-      Email: [
-        { key: 'subject', label: 'Subject', type: 'text' },
-        { key: 'status', label: 'Status', type: 'select', options: ['Sent', 'Delivered', 'Opened', 'Replied', 'Bounced'] },
-        { key: 'content', label: 'Content', type: 'textarea' }
-      ],
-      Meeting: [
-        { key: 'duration', label: 'Duration', type: 'text' },
-        { key: 'location', label: 'Location', type: 'text' },
-        { key: 'attendees', label: 'Attendees', type: 'text' },
-        { key: 'agenda', label: 'Agenda', type: 'textarea' },
-        { key: 'outcome', label: 'Outcome', type: 'textarea' }
-      ],
-      WhatsApp: [
-        { key: 'message', label: 'Message', type: 'textarea' },
-        { key: 'status', label: 'Status', type: 'select', options: ['Sent', 'Delivered', 'Read', 'Replied'] },
-        { key: 'response', label: 'Response', type: 'textarea' }
-      ],
-      Note: [
-        { key: 'content', label: 'Note', type: 'textarea' }
-      ],
-      'Follow-up': [
-        { key: 'date', label: 'Follow-up Date', type: 'text' },
-        { key: 'type', label: 'Type', type: 'select', options: ['Call', 'Email', 'Meeting', 'WhatsApp'] },
-        { key: 'notes', label: 'Notes', type: 'textarea' }
-      ],
-      Proposal: [
-        { key: 'title', label: 'Proposal Title', type: 'text' },
-        { key: 'value', label: 'Value', type: 'text' },
-        { key: 'status', label: 'Status', type: 'select', options: ['Draft', 'Sent', 'Under Review', 'Accepted', 'Rejected'] },
-        { key: 'notes', label: 'Notes', type: 'textarea' }
-      ],
-      Demo: [
-        { key: 'duration', label: 'Duration', type: 'text' },
-        { key: 'features', label: 'Features Shown', type: 'textarea' },
-        { key: 'feedback', label: 'Feedback', type: 'textarea' },
-        { key: 'next_steps', label: 'Next Steps', type: 'textarea' }
-      ],
-      Contract: [
-        { key: 'title', label: 'Contract Title', type: 'text' },
-        { key: 'value', label: 'Value', type: 'text' },
-        { key: 'status', label: 'Status', type: 'select', options: ['Draft', 'Sent', 'Under Review', 'Signed', 'Rejected'] },
+      'Lead Created': [
+        { key: 'source', label: 'Source', type: 'text' },
         { key: 'notes', label: 'Notes', type: 'textarea' }
       ],
       'Lead Stage Changed': [
@@ -85,8 +42,15 @@ export function EditActivityDialog({ activity, open, onOpenChange, onActivityUpd
         { key: 'change_time', label: 'Time of Change', type: 'text' },
         { key: 'reason', label: 'Reason for Change', type: 'textarea' }
       ],
-      Other: [
-        { key: 'description', label: 'Description', type: 'textarea' }
+      'WhatsApp Broadcast Sent': [
+        { key: 'message', label: 'Message Sent', type: 'textarea' },
+        { key: 'response', label: 'Response', type: 'select', options: ['Replied', 'Yes', 'No', 'No Response'] },
+        { key: 'response_text', label: 'Response Text', type: 'textarea' }
+      ],
+      'Called': [
+        { key: 'duration', label: 'Duration', type: 'text' },
+        { key: 'outcome', label: 'Outcome', type: 'select', options: ['Interested', 'Not Interested', 'Follow-up Required', 'No Answer', 'Busy'] },
+        { key: 'notes', label: 'Notes', type: 'textarea' }
       ]
     }
     return fields[type] || [{ key: 'note', label: 'Note', type: 'textarea' }]
@@ -149,17 +113,30 @@ export function EditActivityDialog({ activity, open, onOpenChange, onActivityUpd
                 <SelectValue placeholder="Activity Type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Call">📞 Call</SelectItem>
-                <SelectItem value="Email">📧 Email</SelectItem>
-                <SelectItem value="Meeting">🤝 Meeting</SelectItem>
-                <SelectItem value="WhatsApp">💬 WhatsApp</SelectItem>
-                <SelectItem value="Note">📝 Note</SelectItem>
-                <SelectItem value="Follow-up">⏰ Follow-up</SelectItem>
-                <SelectItem value="Proposal">📋 Proposal</SelectItem>
-                <SelectItem value="Demo">🎯 Demo</SelectItem>
-                <SelectItem value="Contract">📄 Contract</SelectItem>
-                <SelectItem value="Lead Stage Changed">🔄 Lead Stage Changed</SelectItem>
-                <SelectItem value="Other">📌 Other</SelectItem>
+                <SelectItem value="Lead Created">
+                  <div className="flex items-center gap-2">
+                    <IconUser className="h-4 w-4" />
+                    Lead Created
+                  </div>
+                </SelectItem>
+                <SelectItem value="Lead Stage Changed">
+                  <div className="flex items-center gap-2">
+                    <IconRefresh className="h-4 w-4" />
+                    Lead Stage Changed
+                  </div>
+                </SelectItem>
+                <SelectItem value="WhatsApp Broadcast Sent">
+                  <div className="flex items-center gap-2">
+                    <IconMessageCircle className="h-4 w-4" />
+                    WhatsApp Broadcast Sent
+                  </div>
+                </SelectItem>
+                <SelectItem value="Called">
+                  <div className="flex items-center gap-2">
+                    <IconPhone className="h-4 w-4" />
+                    Called
+                  </div>
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>

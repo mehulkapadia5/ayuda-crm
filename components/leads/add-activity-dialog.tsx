@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { IconUser, IconRefresh, IconMessageCircle, IconPhone } from "@tabler/icons-react"
 
 export function AddActivityDialog({ leadId, onActivityAdded }: { leadId: string, onActivityAdded?: () => void }) {
   const [open, setOpen] = useState(false)
@@ -67,17 +68,30 @@ export function AddActivityDialog({ leadId, onActivityAdded }: { leadId: string,
               <SelectValue placeholder="Activity Type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Call">📞 Call</SelectItem>
-              <SelectItem value="Email">📧 Email</SelectItem>
-              <SelectItem value="Meeting">🤝 Meeting</SelectItem>
-              <SelectItem value="WhatsApp">💬 WhatsApp</SelectItem>
-              <SelectItem value="Note">📝 Note</SelectItem>
-              <SelectItem value="Follow-up">⏰ Follow-up</SelectItem>
-              <SelectItem value="Proposal">📋 Proposal</SelectItem>
-              <SelectItem value="Demo">🎯 Demo</SelectItem>
-              <SelectItem value="Contract">📄 Contract</SelectItem>
-              <SelectItem value="Lead Stage Changed">🔄 Lead Stage Changed</SelectItem>
-              <SelectItem value="Other">📌 Other</SelectItem>
+              <SelectItem value="Lead Created">
+                <div className="flex items-center gap-2">
+                  <IconUser className="h-4 w-4" />
+                  Lead Created
+                </div>
+              </SelectItem>
+              <SelectItem value="Lead Stage Changed">
+                <div className="flex items-center gap-2">
+                  <IconRefresh className="h-4 w-4" />
+                  Lead Stage Changed
+                </div>
+              </SelectItem>
+              <SelectItem value="WhatsApp Broadcast Sent">
+                <div className="flex items-center gap-2">
+                  <IconMessageCircle className="h-4 w-4" />
+                  WhatsApp Broadcast Sent
+                </div>
+              </SelectItem>
+              <SelectItem value="Called">
+                <div className="flex items-center gap-2">
+                  <IconPhone className="h-4 w-4" />
+                  Called
+                </div>
+              </SelectItem>
             </SelectContent>
           </Select>
           <Textarea 

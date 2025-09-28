@@ -8,7 +8,7 @@ import { AddActivityDialog } from "./add-activity-dialog"
 import { EditActivityDialog } from "./edit-activity-dialog"
 import { DeleteActivityDialog } from "./delete-activity-dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { IconEdit, IconTrash, IconClock } from "@tabler/icons-react"
+import { IconEdit, IconTrash, IconClock, IconUser, IconRefresh, IconMessageCircle, IconPhone } from "@tabler/icons-react"
 
 interface Activity {
   id: string
@@ -28,20 +28,13 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
   const [deletingActivity, setDeletingActivity] = useState<Activity | null>(null)
 
   const getActivityIcon = (type: string) => {
-    const icons: Record<string, string> = {
-      Call: "📞",
-      Email: "📧",
-      Meeting: "🤝",
-      WhatsApp: "💬",
-      Note: "📝",
-      "Follow-up": "⏰",
-      Proposal: "📋",
-      Demo: "🎯",
-      Contract: "📄",
-      "Lead Stage Changed": "🔄",
-      Other: "📌",
+    const icons: Record<string, React.ReactNode> = {
+      "Lead Created": <IconUser className="h-5 w-5" />,
+      "Lead Stage Changed": <IconRefresh className="h-5 w-5" />,
+      "WhatsApp Broadcast Sent": <IconMessageCircle className="h-5 w-5" />,
+      "Called": <IconPhone className="h-5 w-5" />,
     }
-    return icons[type] || "📌"
+    return icons[type] || <IconUser className="h-5 w-5" />
   }
 
   const formatTimestamp = (timestamp: string) => {
@@ -150,7 +143,7 @@ export function ActivitiesFeed({ activities, leadId, onActivityAdded }: Activiti
                 {activities.map((activity, index) => (
                   <div key={activity.id} className="relative flex items-start gap-4">
                     {/* Timeline dot */}
-                    <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center text-lg">
+                    <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-background border-2 border-primary/20 flex items-center justify-center text-muted-foreground">
                       {getActivityIcon(activity.type)}
                     </div>
                     
