@@ -66,7 +66,7 @@ export async function POST(req: Request) {
         details: gb,
       })
     }
-  } catch (e) {
+  } catch {
     // Non-fatal
   }
 

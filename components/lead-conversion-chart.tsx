@@ -25,12 +25,6 @@ interface LeadConversionChartProps {
 }
 
 export function LeadConversionChart({ data, months }: LeadConversionChartProps) {
-  const getCellColor = (value: number, maxValue: number) => {
-    if (value === 0) return "bg-muted/20"
-    const intensity = Math.min(value / maxValue, 1)
-    const opacity = 0.2 + (intensity * 0.8)
-    return `bg-primary/20` // You can customize this color
-  }
 
   const getCellIntensity = (value: number, maxValue: number) => {
     if (value === 0) return 0.1
@@ -49,7 +43,7 @@ export function LeadConversionChart({ data, months }: LeadConversionChartProps) 
           <CardTitle>Lead Conversion Matrix</CardTitle>
           <CardDescription>
             <span className="hidden @[540px]/card:block">
-              Shows when leads created in each month converted to "Enrolled" stage
+              Shows when leads created in each month converted to &quot;Enrolled&quot; stage
             </span>
             <span className="@[540px]/card:hidden">Lead Conversion Matrix</span>
           </CardDescription>

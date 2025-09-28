@@ -7,7 +7,7 @@ import { AddActivityDialog } from "./add-activity-dialog"
 interface Activity {
   id: string
   type: string
-  details: any
+  details: Record<string, unknown>
   created_at: string
 }
 
@@ -51,7 +51,7 @@ export function ActivitiesFeed({ activities, leadId }: ActivitiesFeedProps) {
     }
   }
 
-  const formatDetails = (details: any) => {
+  const formatDetails = (details: Record<string, unknown>) => {
     if (!details || Object.keys(details).length === 0) return null
     
     if (typeof details === 'string') return details

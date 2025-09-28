@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
@@ -83,7 +82,7 @@ export function AddActivityDialog({ leadId }: { leadId: string }) {
             rows={4}
           />
           <div className="text-xs text-muted-foreground">
-            You can enter simple text or JSON format like: {"{"}"duration": "30 minutes", "outcome": "interested"{"}"}
+            You can enter simple text or JSON format like: &quot;{&quot;duration&quot;: &quot;30 minutes&quot;, &quot;outcome&quot;: &quot;interested&quot;}&quot;
           </div>
         </div>
         <DialogFooter>

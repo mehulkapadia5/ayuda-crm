@@ -1,11 +1,6 @@
 import { getServiceClient } from "@/lib/supabase/server"
 import { LeadConversionChart } from "./lead-conversion-chart"
 
-interface Lead {
-  id: string
-  created_at: string
-  stage: string
-}
 
 export async function LeadConversionData() {
   const supabase = getServiceClient()
@@ -55,7 +50,6 @@ export async function LeadConversionData() {
   // Process each lead
   leads.forEach(lead => {
     const leadDate = new Date(lead.created_at)
-    const leadMonthKey = `${leadDate.getFullYear()}-${String(leadDate.getMonth() + 1).padStart(2, '0')}`
     const leadMonthName = leadDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
     
     monthSet.add(leadMonthName)

@@ -31,14 +31,14 @@ export type Activity = {
   id: string
   lead_id: string
   type: string
-  details: any
+  details: Record<string, unknown>
   created_at: string
 }
 
 export type Campaign = {
   id: string
   name: string
-  filters: any
+  filters: Record<string, unknown>
   gallabox_campaign_id: string | null
   created_at: string
 }

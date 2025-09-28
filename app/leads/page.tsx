@@ -1,7 +1,7 @@
 import { SiteHeader } from "@/components/site-header"
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { getServiceClient, type Lead } from "@/lib/supabase/server"
+import { getServiceClient } from "@/lib/supabase/server"
 import { LeadsTable } from "@/components/leads/leads-table"
 import { AddLeadDialog } from "@/components/leads/add-lead-dialog"
 

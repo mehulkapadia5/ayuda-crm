@@ -3,7 +3,7 @@ import { getServiceClient } from "@/lib/supabase/server"
 
 export async function POST(req: Request) {
   // Capture full body for logging, and try to associate to a lead by phone if available
-  const body = await req.json().catch(() => ({} as any))
+  const body = await req.json().catch(() => ({} as Record<string, unknown>))
   const supabase = getServiceClient()
 
   let leadId: string | null = null
