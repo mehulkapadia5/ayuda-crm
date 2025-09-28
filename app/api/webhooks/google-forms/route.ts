@@ -14,10 +14,15 @@ function coalesceString(v: unknown): string {
   return typeof v === "string" ? v : v == null ? "" : String(v)
 }
 
+function getStringField(obj: Record<string, unknown>, key: string): string | undefined {
+  const value = obj[key]
+  return typeof value === "string" ? value : undefined
+}
+
 function extractFields(body: Record<string, unknown>) {
   // Normalize keys to ease matching
   const entries = Object.entries(body).map(([k, v]) => [k.toLowerCase(), v] as const)
-  const lookup = Object.fromEntries(entries)
+  const lookup: Record<string, unknown> = Object.fromEntries(entries)
 
   // Common Google Forms titles → our keys
   const email = coalesceString(
@@ -50,13 +55,10 @@ export async function POST(request: Request) {
     }
 
     // Extract resiliently
-    const { email, name, whatsapp } = {
-      ...extractFields(json),
-      // Prefer explicit fields if present
-      email: coalesceString((json as any).email ?? extractFields(json).email),
-      name: coalesceString((json as any).name ?? extractFields(json).name),
-      whatsapp: coalesceString((json as any).whatsapp ?? extractFields(json).whatsapp),
-    }
+    const extracted = extractFields(json)
+    const email = coalesceString(getStringField(json, "email") ?? extracted.email)
+    const name = coalesceString(getStringField(json, "name") ?? extracted.name)
+    const whatsapp = coalesceString(getStringField(json, "whatsapp") ?? extracted.whatsapp)
 
     if (!email || !name || !whatsapp) {
       console.error("[google-forms] Missing required fields", { email, name, whatsapp })
