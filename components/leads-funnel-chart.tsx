@@ -180,10 +180,13 @@ export function LeadsFunnelChart({ onDateRangeChange }: LeadsFunnelChartProps) {
                     offset={12}
                     className="fill-foreground"
                     fontSize={12}
-                    formatter={(value: number, entry: any) => [
-                      `${value.toLocaleString()} (${entry.payload.conversion})`,
-                      ""
-                    ]}
+                    formatter={(value: number, entry: any) => {
+                      const conversion = entry?.payload?.conversion || "0%"
+                      return [
+                        `${value.toLocaleString()} (${conversion})`,
+                        ""
+                      ]
+                    }}
                   />
                 </Bar>
               </BarChart>
